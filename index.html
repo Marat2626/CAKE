@@ -383,11 +383,6 @@
             cursor: pointer;
             position: relative;
         }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);  /* всегда 3 колонки */
-            gap: 32px;
-        }
 
         .product-card:hover {
             transform: translateY(-12px);
@@ -711,7 +706,7 @@
 
 
 <script>
-const API = "http://127.0.0.1:8000";
+const API = "";  // пустая строка = тот же домен
 
 // Загружаем торты из базы
 fetch(API + "/cakes")

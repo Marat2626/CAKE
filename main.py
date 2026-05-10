@@ -8,7 +8,7 @@ from database import SessionLocal, Base, engine
 from models import Cake, Order
 app = FastAPI(title = "Торты")
 
-
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -99,9 +99,9 @@ def startup():
     Base.metadata.create_all(bind=engine)  # создай все таблицы в базе
 
 
-@app.get("/")
-def root():
-    return {"message": "CakeMe API работает!"}
+# @app.get("/")
+# def root():
+#     return {"message": "CakeMe API работает!"}
 
 
 @app.get("/cakes")
@@ -183,3 +183,4 @@ def delete_cake(id: int, token: str, db = Depends(get_db)):
 
     return ("ТОрт удален")
 
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
