@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CakeMe — Авторские торты с характером</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --choco: #2C1810;
+            --caramel: #D4A574;
+            --cream: #FFF8F0;
+            --white: #FFFFFF;
+            --dark: #1A1A1A;
+            --accent: #E8754C;
+            --green: #4A6741;
+            --pink: #E8A5B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Шапка */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 76px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, #D4A574, #E8A5B0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #C8BDB6;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .btn-nav {
+            background: var(--caramel);
+            color: #2C1810 !important;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700 !important;
+            letter-spacing: 0.3px !important;
+            transition: all 0.3s !important;
+            box-shadow: 0 4px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-nav:hover {
+            background: #E8C9A0 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 165, 116, 0.5);
+        }
+
+        /* Мобильное меню */
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .burger span {
+            width: 28px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* ГЕРОЙ-БЛОК */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFECD2 30%, #FDE2E4 60%, #FADADD 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -200px;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(232, 165, 176, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+            padding-top: 80px;
+        }
+
+        .hero-text {
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2C1810;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            line-height: 1.05;
+            font-weight: 700;
+            color: #2C1810;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+            letter-spacing: -1px;
+        }
+
+        .hero-text h1 .accent {
+            position: relative;
+            color: var(--accent);
+            display: inline-block;
+        }
+
+        .hero-text h1 .accent::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: rgba(232, 117, 76, 0.2);
+            z-index: -1;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: #5C4A3A;
+            margin-bottom: 32px;
+            line-height: 1.7;
+            max-width: 480px;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .btn-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary-hero {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(232, 117, 76, 0.4);
+        }
+        .btn-primary-hero:hover {
+            background: #D4653D;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(232, 117, 76, 0.5);
+        }
+
+        .btn-outline-hero {
+            background: transparent;
+            color: #2C1810;
+            border: 2px solid #D4A574;
+        }
+        .btn-outline-hero:hover {
+            background: #fff;
+            border-color: #2C1810;
+            transform: translateY(-3px);
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .hero-image-wrap img {
+            width: 100%;
+            max-width: 550px;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(44, 24, 16, 0.2);
+            transform: rotate(2deg);
+            transition: transform 0.5s;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .hero-image-wrap img:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        /* Декоративные элементы на герое */
+        .hero-stars {
+            position: absolute;
+            top: 15%;
+            left: 5%;
+            font-size: 28px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .hero-sparkle {
+            position: absolute;
+            bottom: 20%;
+            right: 8%;
+            font-size: 36px;
+            animation: float 4s ease-in-out infinite 0.5s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Секция КАТАЛОГ */
+        .catalog {
+            padding: 100px 0 80px;
+            background: #fff;
+        }
+
+        .catalog-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .catalog-header .label {
+            display: inline-block;
+            background: #FDE2E4;
+            color: #C4606A;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .catalog-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #2C1810;
+            margin-bottom: 12px;
+        }
+
+        .catalog-header p {
+            color: #7A6B5C;
+            font-size: 17px;
+        }
+
+       .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+       .product-card {
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #F0E8DE;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            cursor: pointer;
+            position: relative;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);  /* всегда 3 колонки */
+            gap: 32px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 60px rgba(44, 24, 16, 0.12);
+            border-color: #D4A574;
+        }
+
+      .product-image {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.08);
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--accent);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .product-fav {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .product-fav:hover {
+            transform: scale(1.15);
+        }
+
+        .product-info {
+            padding: 24px;
+        }
+
+        .product-info .category {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #B0977E;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .product-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2C1810;
+        }
+
+        .product-info .desc {
+            font-size: 14px;
+            color: #7A6B5C;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: #8B7B6B;
+            background: #F9F5F0;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #F0E8DE;
+            padding-top: 16px;
+        }
+
+        .price-block .price {
+            font-size: 24px;
+            font-weight: 800;
+            color: #2C1810;
+        }
+        .price-block .old-price {
+            font-size: 14px;
+            color: #B0A090;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+
+        .btn-buy {
+            background: #2C1810;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-buy:hover {
+            background: var(--accent);
+            box-shadow: 0 8px 25px rgba(232, 117, 76, 0.4);
+        }
+
+        /* Секция преимуществ (короткая полоска) */
+        .benefits-strip {
+            background: #2C1810;
+            color: #fff;
+            padding: 50px 0;
+            margin: 40px 0 0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            text-align: center;
+        }
+
+        .benefit-item .icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+        .benefit-item h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .benefit-item p {
+            font-size: 13px;
+            color: #B0A090;
+        }
+
+        /* Футер */
+        footer {
+            background: #1A1512;
+            color: #8B7B6B;
+            padding: 40px 0;
+            text-align: center;
+        }
+        footer .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        footer .contacts {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+
+        /* Адаптив */
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding-top: 100px;
+                gap: 40px;
+            }
+            .hero-text h1 { font-size: 48px; }
+            .hero-text p { max-width: 100%; margin: 0 auto 32px; }
+            .hero-buttons { justify-content: center; }
+            .hero-image-wrap img { max-width: 320px; }
+            .hero-stars, .hero-sparkle { display: none; }
+            .benefits-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .catalog-header h2 { font-size: 36px; }
+            .product-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Cake<span>Me</span></a>
+                <ul class="nav-links">
+                    <li><a href="#catalog">Каталог</a></li>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Отзывы</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#" class="btn-nav">Заказать торт</a></li>
+                </ul>
+                <div class="burger">
+                    <span></span><span></span><span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- ГЕРОЙ -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge">
+                            <span class="dot"></span> Принимаем заказы 24/7
+                        </div>
+                        <h1>Вкус,<br>который хочется<br><span class="accent">запомнить</span></h1>
+                        <p>Создаём авторские торты в минималистичном стиле. Только натуральные ингредиенты и ручная работа с душой. Доставка по городу в день заказа.</p>
+                        <div class="hero-buttons">
+                            <a href="#catalog" class="btn-hero btn-primary-hero">🍰 Выбрать торт</a>
+                            <a href="#" class="btn-hero btn-outline-hero">📞 Перезвоните мне</a>
+                        </div>
+                    </div>
+                    <div class="hero-image-wrap">
+                        <img src="photos/p1.png" alt="Вкусный торт">
+                    </div>
+                </div>
+            </div>
+            <div class="hero-stars">✨</div>
+            <div class="hero-sparkle">🌸</div>
+        </section>
+
+        <!-- КАТАЛОГ (сразу после героя) -->
+   <section class="catalog" id="catalog">
+    <div class="container">
+        <div class="catalog-header">
+            <span class="label">Хиты продаж</span>
+            <h2>Наши торты</h2>
+            <p>Каждый десерт — маленькое произведение искусства</p>
+        </div>
+        <div class="product-grid">
+            <!-- Торты загрузятся из базы автоматически -->
+        </div>
+    </div>
+    </section>
+        <!-- Полоска преимуществ -->
+        <section class="benefits-strip">
+            <div class="container">
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="icon">🧈</div>
+                        <h4>82,5% масло</h4>
+                        <p>Никакого маргарина</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon">🚀</div>
+                        <h4>Экспресс-доставка</h4>
+                        <p>От 2 часов по городу</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon">🎨</div>
+                        <h4>Уникальный дизайн</h4>
+                        <p>Рисуем что угодно</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="icon">💯</div>
+                        <h4>Гарантия свежести</h4>
+                        <p>Печём в день доставки</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="footer-brand">CakeMe</div>
+            <div class="contacts">
+                <span>📍 ул. Кондитерская, 15, Москва</span>
+                <span>📞 +7 (999) 123-45-67</span>
+                <span>✉️ sweet@cakeme.ru</span>
+                <span>🕐 Ежедневно 09:00–22:00</span>
+            </div>
+        </div>
+    </footer>
+
+
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+// Загружаем торты из базы
+fetch(API + "/cakes")
+    .then(r => r.json())
+    .then(cakes => {
+        let html = "";
+        cakes.forEach(c => {
+            html += `
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="${c.image_url || 'photos/p1.png'}" alt="${c.name}" onerror="this.src='photos/p1.png'">
+                    ${c.is_available ? '<span class="product-tag">🔥 Хит</span>' : '<span class="product-tag" style="background:#999;">Нет в наличии</span>'}
+                    <div class="product-fav">🤍</div>
+                </div>
+                <div class="product-info">
+                    <span class="category">${c.category || 'Торт'}</span>
+                    <h3>${c.name}</h3>
+                    <p class="desc">${c.description || ''}</p>
+                    <div class="product-meta">
+                        <span class="meta-item">⚖️ ${c.weight} кг</span>
+                        <span class="meta-item">👥 ${c.persons} персон</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="price-block">
+                            <span class="price">${c.price.toLocaleString()} ₽</span>
+                        </div>
+                        <button class="btn-buy">🛒 В корзину</button>
+                    </div>
+                </div>
+            </div>`;
+        });
+        document.querySelector(".product-grid").innerHTML = html || "<p style='text-align:center;'>Тортов пока нет</p>";
+    });
+
+   fetch(API + "/cakes")
+    .then(r => r.json())
+    .then(cakes => {
+        if (cakes.length > 0) {
+            // Находим самый дорогой торт
+            let maxPrice = Math.max(...cakes.map(c => c.price));
+            let heroCake = cakes.find(c => c.price === maxPrice);
+
+            // Меняем картинку
+            let heroImg = document.querySelector(".hero-image-wrap img");
+            heroImg.src = heroCake.image_url || 'photos/p1.png';
+            heroImg.alt = heroCake.name;
+
+            // Меняем слово "запомнить" на название торта
+            document.querySelector(".hero-text h1 .accent").textContent = heroCake.name;
+
+            // Меняем описание
+            document.querySelector(".hero-text p").textContent = heroCake.description || 'Создаём авторские торты в минималистичном стиле.';
+
+            // Меняем цену в кнопке
+            document.querySelector(".btn-primary-hero").innerHTML = `🍰 ${heroCake.price.toLocaleString()} ₽`;
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
