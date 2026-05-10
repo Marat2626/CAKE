@@ -13,9 +13,11 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # пока все, потом заменишь на свой домен
     allow_methods=["*"],
     allow_headers=["*"],
 )
