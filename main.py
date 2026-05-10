@@ -1,4 +1,4 @@
-
+import os
 
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
@@ -183,4 +183,4 @@ def delete_cake(id: int, token: str, db = Depends(get_db)):
 
     return ("ТОрт удален")
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")
