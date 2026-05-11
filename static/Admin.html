@@ -69,6 +69,7 @@
         <div class="tabs" style="margin-bottom:20px;">
             <button class="tab active" onclick="showTab('cakes')">🍰 Торты</button>
             <button class="tab" onclick="showTab('orders')">📦 Заказы</button>
+            <button class="tab" onclick="showTab('reviews')">💬 Отзывы</button>
         </div>
         <div class="box">
             <button class="logout-btn" onclick="logout()">Выйти</button>
@@ -97,6 +98,12 @@
         <div class="box" id="ordersBox" style="display:none;">
             <h2>📦 Заказы</h2>
             <div id="ordersList"></div>
+        </div>
+
+           <!-- Отзывы (скрыты по умолчанию) -->
+        <div class="box" id="reviewsBox" style="display:none;">
+            <h2>💬 Отзывы</h2>
+            <div id="reviewsList"></div>
         </div>
     </div>   <!-- закрытие adminScreen -->
 </div>       <!-- закрытие container -->
@@ -249,6 +256,13 @@ document.getElementById("passwordInput").addEventListener("keypress", function(e
         document.getElementById('ordersBox').style.display = 'block';
         document.querySelector('.tab:nth-child(2)').classList.add('active');
         loadOrders();
+    } else if (tab === 'reviews') {
+        document.getElementById('cakesList').parentElement.style.display = 'none';
+        document.getElementById('ordersBox').style.display = 'none';
+        document.getElementById('reviewsBox').style.display = 'block';
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelector('.tab:nth-child(3)').classList.add('active');
+        loadAdminReviews();
     }
 }
 
@@ -277,6 +291,37 @@ function deleteOrder(id) {
     if (confirm("Удалить этот заказ?")) {
         fetch(API + "/admin/orders/" + id + "?token=" + adminToken, { method: "DELETE" })
         .then(() => loadOrders());
+    }
+}
+
+
+
+    function loadAdminReviews() {
+    fetch(API + "/reviews")
+        .then(r => r.json())
+        .then(reviews => {
+            let html = "";
+            reviews.forEach(r => {
+                let stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+                let date = new Date(r.created_at).toLocaleDateString('ru-RU');
+                html += `
+                <div class="order-card">
+                    <div class="order-info">
+                        <p><strong>${r.author_name}</strong> — ${stars}</p>
+                        <p>${r.text}</p>
+                        <p class="order-date">${date}</p>
+                    </div>
+                    <button class="btn-del" onclick="deleteReview(${r.id})">🗑️</button>
+                </div>`;
+            });
+            document.getElementById("reviewsList").innerHTML = html || "<p>Отзывов пока нет</p>";
+        });
+}
+
+function deleteReview(id) {
+    if (confirm("Удалить этот отзыв?")) {
+        fetch(API + "/admin/reviews/" + id + "?token=" + adminToken, { method: "DELETE" })
+        .then(() => loadAdminReviews());
     }
 }
 </script>
