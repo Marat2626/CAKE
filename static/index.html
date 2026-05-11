@@ -19,6 +19,9 @@
             --pink: #E8A5B0;
         }
 
+
+
+
         * {
             margin: 0;
             padding: 0;
@@ -37,6 +40,20 @@
             margin: 0 auto;
             padding: 0 24px;
         }
+
+        /* Отзывы */
+        .reviews-section { padding: 80px 0; background: #FFF8F0; }
+        .review-card { background: white; padding: 25px; border-radius: 16px; margin: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .review-author { font-weight: 700; color: #2C1810; }
+        .review-date { color: #999; font-size: 12px; }
+        .review-stars { color: #FFB800; }
+        .review-text { color: #555; line-height: 1.5; }
+        .review-form-box { background: white; padding: 30px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .star-rating { display: flex; gap: 5px; margin: 10px 0; cursor: pointer; }
+        .star { font-size: 28px; color: #ddd; transition: 0.2s; }
+        .star.active, .star:hover { color: #FFB800; }
+
 
         /* Шапка */
         header {
@@ -701,10 +718,36 @@
         </div>
     </div>
     </section>
-        <!-- Полоска преимуществ -->
-        <section class="benefits-strip">
-            <div class="container">
-                <div class="benefits-grid">
+
+                        <!-- ОТЗЫВЫ -->
+            <section class="reviews-section" id="reviews">
+                <div class="container">
+                    <div class="catalog-header">
+                        <span class="label">Отзывы</span>
+                        <h2>Что говорят клиенты</h2>
+                    </div>
+                    <div class="review-form-box">
+                        <h3 style="margin-bottom:15px;">✍️ Оставить отзыв</h3>
+                        <input type="text" id="reviewName" placeholder="Ваше имя">
+                        <div class="star-rating" id="starRating">
+                            <span class="star" onclick="setRating(1)">★</span>
+                            <span class="star" onclick="setRating(2)">★</span>
+                            <span class="star" onclick="setRating(3)">★</span>
+                            <span class="star" onclick="setRating(4)">★</span>
+                            <span class="star active" onclick="setRating(5)">★</span>
+                        </div>
+                        <textarea id="reviewText" placeholder="Ваш отзыв"></textarea>
+                        <button class="btn-submit" onclick="submitReview()" style="width:auto;margin-top:10px;">Отправить отзыв</button>
+                    </div>
+                    <div id="reviewsList"></div>
+                </div>
+            </section>
+
+<!-- Полоска преимуществ -->
+<section class="benefits-strip">
+    <div class="container">
+        <div class="benefits-grid">
+
                     <div class="benefit-item">
                         <div class="icon">🧈</div>
                         <h4>82,5% масло</h4>
@@ -725,9 +768,11 @@
                         <h4>Гарантия свежести</h4>
                         <p>Печём в день доставки</p>
                     </div>
-                </div>
-            </div>
-        </section>
+
+        </div>
+    </div>
+</section>
+
     </main>
 
     <!-- Футер -->
@@ -870,6 +915,60 @@ function submitOrder() {
         document.getElementById("orderSuccess").style.display = "block";
     });
 }
+
+
+
+    let currentRating = 5;
+
+function setRating(r) {
+    currentRating = r;
+    document.querySelectorAll('#starRating .star').forEach((s, i) => {
+        s.classList.toggle('active', i < r);
+    });
+}
+
+function loadReviews() {
+    fetch(API + "/reviews")
+        .then(r => r.json())
+        .then(reviews => {
+            let html = "";
+            reviews.forEach(r => {
+                let stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+                let date = new Date(r.created_at).toLocaleDateString('ru-RU');
+                html += `
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-author">${r.author_name}</span>
+                        <span class="review-date">${date}</span>
+                    </div>
+                    <div class="review-stars">${stars}</div>
+                    <p class="review-text">${r.text}</p>
+                </div>`;
+            });
+            document.getElementById("reviewsList").innerHTML = html || "<p style='text-align:center;color:#999;'>Пока нет отзывов. Будьте первым!</p>";
+        });
+}
+
+function submitReview() {
+    let name = document.getElementById("reviewName").value;
+    let text = document.getElementById("reviewText").value;
+    if (!name || !text) return alert("Заполните имя и отзыв");
+
+    fetch(API + "/reviews", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({author_name: name, text: text, rating: currentRating})
+    })
+    .then(() => {
+        document.getElementById("reviewName").value = "";
+        document.getElementById("reviewText").value = "";
+        setRating(5);
+        loadReviews();
+    });
+}
+
+loadReviews();
+
 </script>
 
 

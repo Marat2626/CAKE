@@ -6,7 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import String
 
 from database import SessionLocal, Base, engine
-from models import Cake, Order
+from models import Cake, Order, Reviews
+
 app = FastAPI(title = "Торты")
 
 from fastapi.staticfiles import StaticFiles
@@ -181,14 +182,14 @@ def delete_cake(id: int, token: str, db = Depends(get_db)):
     return ("ТОрт удален")
 
 
+
+
+
 class Orders(BaseModel):
     cake_id: int
     customer_name: str
     phone : str
     message: str
-
-
-
 
 
 @app.post("/order")
@@ -229,6 +230,38 @@ def delete_order(order_id: int, token: str, db=Depends(get_db)):
     return {"message": "Заказ удалён"}
 
 
+
+
+class Reviewses(BaseModel):
+    author_name: str
+    text: str
+    rating: int
+
+
+@app.post("/reviews")
+def add_reviews(reviews: Reviewses, db = Depends(get_db)):
+
+    newReviews = Reviews(
+        author_name = reviews.author_name,
+        text = reviews.text,
+        rating = reviews.rating
+    )
+
+    db.add(newReviews)
+    db.commit()
+    db.refresh(newReviews)
+    return newReviews
+
+@app.delete("/admin/reviews/{review_id}")
+def delete_review(review_id: int, db = Depends(get_db)):
+    review = db.query(Reviews).filter(Reviews.id == review_id).first()
+    db.delete(review)
+    db.commit()
+    return review, " Удален"
+
+@app.get("/reviews")
+def get_reviews( db = Depends(get_db)):
+    return db.query(Reviews).all()
 
 
 

@@ -22,3 +22,11 @@ class Order(Base):
     phone = Column(String, 	nullable=False)
     message = Column(Text, default="")
     created_at = Column(DateTime, server_default=func.now())
+
+class Reviews(Base):
+    __tablename__ = "reviews"
+    id = Column(Integer, primary_key=True)
+    author_name = Column(String, nullable=False)
+    text = Column(Text, nullable=False)
+    rating = Column(Integer, default=5)
+    created_at = Column(DateTime, server_default=func.now())
