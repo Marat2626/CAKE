@@ -41,6 +41,15 @@
         .error { color: #f44336; margin: 10px 0; font-size: 14px; }
         
         .logout-btn { background: #666; color: white; float: right; }
+
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; border-radius: 20px; cursor: pointer; border: 2px solid #ddd; background: white; }
+        .tab.active { background: #2C1810; color: white; border-color: #2C1810; }
+        .order-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; margin: 10px 0; }
+        .order-info p { margin: 3px 0; }
+        .order-date { color: #999; font-size: 12px; }
+
     </style>
 </head>
 <body>
@@ -56,7 +65,11 @@
     </div>
     
     <!-- АДМИНКА -->
-    <div id="adminScreen" style="display:none;">
+       <div id="adminScreen" style="display:none;">
+        <div class="tabs" style="margin-bottom:20px;">
+            <button class="tab active" onclick="showTab('cakes')">🍰 Торты</button>
+            <button class="tab" onclick="showTab('orders')">📦 Заказы</button>
+        </div>
         <div class="box">
             <button class="logout-btn" onclick="logout()">Выйти</button>
             <h1>🍰 Управление тортами</h1>
@@ -75,13 +88,18 @@
             <button class="btn-add" onclick="addCake()">➕ Добавить торт</button>
         </div>
         
-        <div class="box">
+       <div class="box">
             <h2>Все торты</h2>
             <div id="cakesList"></div>
         </div>
-    </div>
-    
-</div>
+
+        <!-- Заказы (скрыты по умолчанию) -->
+        <div class="box" id="ordersBox" style="display:none;">
+            <h2>📦 Заказы</h2>
+            <div id="ordersList"></div>
+        </div>
+    </div>   <!-- закрытие adminScreen -->
+</div>       <!-- закрытие container -->
 
 <script>
 const API = "";  // пустая строка = тот же домен
@@ -216,6 +234,51 @@ function deleteCake(id) {
 document.getElementById("passwordInput").addEventListener("keypress", function(e) {
     if (e.key === "Enter") login();
 });
+
+
+
+    function showTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    if (tab === 'cakes') {
+        document.getElementById('cakesList').parentElement.style.display = 'block';
+        document.getElementById('ordersBox').style.display = 'none';
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        loadCakes();
+    } else {
+        document.getElementById('cakesList').parentElement.style.display = 'none';
+        document.getElementById('ordersBox').style.display = 'block';
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        loadOrders();
+    }
+}
+
+function loadOrders() {
+    fetch(API + "/admin/orders?token=" + adminToken)
+        .then(r => r.json())
+        .then(orders => {
+            let html = "";
+            orders.forEach(o => {
+                let date = new Date(o.created_at).toLocaleString('ru-RU');
+                html += `
+                <div class="order-card">
+                    <div class="order-info">
+                        <p><strong>${o.customer_name}</strong> — 📞 ${o.phone}</p>
+                        <p>Торт ID: ${o.cake_id} | ${o.message || 'Без комментария'}</p>
+                        <p class="order-date">${date}</p>
+                    </div>
+                    <button class="btn-del" onclick="deleteOrder(${o.id})">🗑️</button>
+                </div>`;
+            });
+            document.getElementById("ordersList").innerHTML = html || "<p>Заказов пока нет</p>";
+        });
+}
+
+function deleteOrder(id) {
+    if (confirm("Удалить этот заказ?")) {
+        fetch(API + "/admin/orders/" + id + "?token=" + adminToken, { method: "DELETE" })
+        .then(() => loadOrders());
+    }
+}
 </script>
 
 </body>
