@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import String
 
 from database import SessionLocal, Base, engine
 from models import Cake, Order
@@ -99,10 +100,6 @@ def startup():
     Base.metadata.create_all(bind=engine)  # создай все таблицы в базе
 
 
-# @app.get("/")
-# def root():
-#     return {"message": "CakeMe API работает!"}
-
 
 @app.get("/cakes")
 def get_cakes(db = Depends(get_db)):
@@ -182,5 +179,57 @@ def delete_cake(id: int, token: str, db = Depends(get_db)):
     db.commit()
 
     return ("ТОрт удален")
+
+
+class Orders(BaseModel):
+    cake_id: int
+    customer_name: str
+    phone : str
+    message: str
+
+
+
+
+
+@app.post("/order")
+def order(data: Orders, db = Depends(get_db)):
+
+    newOrder = Order(
+        cake_id = data.cake_id,
+        customer_name = data.customer_name,
+        phone = data.phone,
+        message = data.message,
+
+    )
+    db.add(newOrder)
+    db.commit()
+    db.refresh(newOrder)
+    return newOrder
+
+
+
+@app.get("/admin/orders")
+def get_admin_orders(token: str, db = Depends(get_db)):
+    if not verify_token(token):
+        return {"error": "Вы не админ"}
+    return db.query(Order).all()
+
+
+@app.delete("/admin/orders/{order_id}")
+def delete_order(order_id: int, token: str, db=Depends(get_db)):
+    if not verify_token(token):
+        return {"error": "Вы не админ"}
+
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        return {"error": "Заказ не найден"}
+
+    db.delete(order)  # ← ОБЪЕКТ, не число!
+    db.commit()
+    return {"message": "Заказ удалён"}
+
+
+
+
 
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")

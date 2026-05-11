@@ -593,6 +593,46 @@
             .hero-stars, .hero-sparkle { display: none; }
             .benefits-grid { grid-template-columns: 1fr 1fr; }
         }
+                /* Модальное окно */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+        }
+        .modal h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
+        .modal .cake-info { color: #888; margin-bottom: 20px; font-size: 14px; }
+        .modal input, .modal textarea {
+            width: 100%; padding: 12px; margin: 8px 0;
+            border: 1px solid #ddd; border-radius: 8px; font-size: 14px;
+        }
+        .modal textarea { height: 80px; resize: vertical; }
+        .modal .btn-submit {
+            width: 100%; padding: 14px; background: #E8754C;
+            color: white; border: none; border-radius: 10px;
+            font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px;
+        }
+        .modal .btn-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none; font-size: 24px; cursor: pointer; color: #999;
+        }
+        .modal .success-msg { display: none; text-align: center; padding: 20px; }
+        .modal .success-msg h3 { color: #4CAF50; margin-bottom: 10px; }
+        .modal .success-msg p { color: #666; line-height: 1.6; }
+        .modal .phone-link { color: #E8754C; font-weight: 700; text-decoration: none; }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -703,7 +743,27 @@
         </div>
     </footer>
 
-
+<!-- Модальное окно заказа -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal">
+        <button class="btn-close" onclick="closeOrderModal()">✕</button>
+        <div id="orderForm">
+            <h3>📋 Заказать торт</h3>
+            <div class="cake-info" id="modalCakeInfo"></div>
+            <input type="text" id="orderName" placeholder="Ваше имя">
+            <input type="tel" id="orderPhone" placeholder="Телефон">
+            <textarea id="orderMessage" placeholder="Комментарий (необязательно)"></textarea>
+            <button class="btn-submit" onclick="submitOrder()">🚀 Отправить заказ</button>
+        </div>
+        <div class="success-msg" id="orderSuccess">
+            <h3>✅ Заказ принят!</h3>
+            <p>Мы свяжемся с вами в ближайшее время.<br><br>
+            Или позвоните нам:<br>
+            <a class="phone-link" href="tel:+79991234567">📞 +7 (999) 123-45-67</a></p>
+            <button class="btn-submit" onclick="closeOrderModal()">Хорошо</button>
+        </div>
+    </div>
+</div>
 
 <script>
 const API = "";  // пустая строка = тот же домен
@@ -733,7 +793,7 @@ fetch(API + "/cakes")
                         <div class="price-block">
                             <span class="price">${c.price.toLocaleString()} ₽</span>
                         </div>
-                        <button class="btn-buy">🛒 В корзину</button>
+                      <button class="btn-buy" onclick='openOrderModal(${c.id}, "${c.name}", ${c.price})'>🛒 Заказать</button>
                     </div>
                 </div>
             </div>`;
@@ -765,8 +825,53 @@ fetch(API + "/cakes")
         }
     });
 
+let currentCakeId = null;
 
+function openOrderModal(cakeId, cakeName, cakePrice) {
+    currentCakeId = cakeId;
+    document.getElementById("modalCakeInfo").innerHTML = `
+        <strong>${cakeName}</strong><br>
+        Цена: ${cakePrice.toLocaleString()} ₽
+    `;
+    document.getElementById("orderForm").style.display = "block";
+    document.getElementById("orderSuccess").style.display = "none";
+    document.getElementById("orderModal").classList.add("active");
+}
+
+function closeOrderModal() {
+    document.getElementById("orderModal").classList.remove("active");
+    document.getElementById("orderName").value = "";
+    document.getElementById("orderPhone").value = "";
+    document.getElementById("orderMessage").value = "";
+}
+
+function submitOrder() {
+    let name = document.getElementById("orderName").value;
+    let phone = document.getElementById("orderPhone").value;
+
+    if (!name || !phone) {
+        alert("Пожалуйста, заполните имя и телефон");
+        return;
+    }
+
+    fetch(API + "/order", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            cake_id: currentCakeId,
+            customer_name: name,
+            phone: phone,
+            message: document.getElementById("orderMessage").value
+        })
+    })
+    .then(r => r.json())
+    .then(() => {
+        document.getElementById("orderForm").style.display = "none";
+        document.getElementById("orderSuccess").style.display = "block";
+    });
+}
 </script>
+
 
 </body>
 </html>
