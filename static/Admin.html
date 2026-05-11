@@ -246,21 +246,22 @@ document.getElementById("passwordInput").addEventListener("keypress", function(e
 
     function showTab(tab) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    if (tab === 'cakes') {
+       if (tab === 'cakes') {
         document.getElementById('cakesList').parentElement.style.display = 'block';
         document.getElementById('ordersBox').style.display = 'none';
+        document.getElementById('reviewsBox').style.display = 'none';
         document.querySelector('.tab:nth-child(1)').classList.add('active');
         loadCakes();
-    } else {
+    } else if (tab === 'orders') {
         document.getElementById('cakesList').parentElement.style.display = 'none';
         document.getElementById('ordersBox').style.display = 'block';
+        document.getElementById('reviewsBox').style.display = 'none';
         document.querySelector('.tab:nth-child(2)').classList.add('active');
         loadOrders();
     } else if (tab === 'reviews') {
         document.getElementById('cakesList').parentElement.style.display = 'none';
         document.getElementById('ordersBox').style.display = 'none';
         document.getElementById('reviewsBox').style.display = 'block';
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelector('.tab:nth-child(3)').classList.add('active');
         loadAdminReviews();
     }
