@@ -299,7 +299,7 @@ def setting(seting: SetingUpdate, token: str, db = Depends(get_db)):
     db.commit()
     return defaults
 
-@app.get("/setting")
+@app.get("/settings")
 def get_settings(db = Depends(get_db)):
     bd = db.query(Setting).all()
 
