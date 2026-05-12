@@ -70,6 +70,7 @@
             <button class="tab active" onclick="showTab('cakes')">🍰 Торты</button>
             <button class="tab" onclick="showTab('orders')">📦 Заказы</button>
             <button class="tab" onclick="showTab('reviews')">💬 Отзывы</button>
+            <button class="tab" onclick="showTab('settings')">⚙️ Настройки</button>
         </div>
         <div class="box">
             <button class="logout-btn" onclick="logout()">Выйти</button>
@@ -101,9 +102,22 @@
         </div>
 
            <!-- Отзывы (скрыты по умолчанию) -->
-        <div class="box" id="reviewsBox" style="display:none;">
+               <div class="box" id="reviewsBox" style="display:none;">
             <h2>💬 Отзывы</h2>
             <div id="reviewsList"></div>
+        </div>
+
+        <!-- Настройки (скрыты по умолчанию) -->
+        <div class="box" id="settingsBox" style="display:none;">
+            <h2>⚙️ Настройки сайта</h2>
+            <input type="text" id="setHead" placeholder="Название бренда">
+            <input type="text" id="setTitle" placeholder="Заголовок">
+            <textarea id="setDesc" placeholder="Описание"></textarea>
+            <input type="text" id="setPhone" placeholder="Телефон">
+            <input type="text" id="setEmail" placeholder="Email">
+            <input type="text" id="setAddress" placeholder="Адрес">
+            <input type="text" id="setHours" placeholder="Часы работы">
+            <button class="btn-add" onclick="saveSettings()">💾 Сохранить настройки</button>
         </div>
     </div>   <!-- закрытие adminScreen -->
 </div>       <!-- закрытие container -->
@@ -265,6 +279,14 @@ document.getElementById("passwordInput").addEventListener("keypress", function(e
         document.querySelector('.tab:nth-child(3)').classList.add('active');
         loadAdminReviews();
     }
+    else if (tab === 'settings') {
+        document.getElementById('cakesList').parentElement.style.display = 'none';
+        document.getElementById('ordersBox').style.display = 'none';
+        document.getElementById('reviewsBox').style.display = 'none';
+        document.getElementById('settingsBox').style.display = 'block';
+        document.querySelector('.tab:nth-child(4)').classList.add('active');
+        loadSettings();
+    }
 }
 
 function loadOrders() {
@@ -324,6 +346,36 @@ function deleteReview(id) {
         fetch(API + "/admin/reviews/" + id + "?token=" + adminToken, { method: "DELETE" })
         .then(() => loadAdminReviews());
     }
+}
+
+    function loadSettings() {
+    fetch(API + "/settings")
+        .then(r => r.json())
+        .then(s => {
+            document.getElementById("setHead").value = s.head || "";
+            document.getElementById("setTitle").value = s.title || "";
+            document.getElementById("setDesc").value = s.description || "";
+            document.getElementById("setPhone").value = s.phone || "";
+            document.getElementById("setEmail").value = s.email || "";
+            document.getElementById("setAddress").value = s.address || "";
+            document.getElementById("setHours").value = s.working_hours || "";
+        });
+}
+
+function saveSettings() {
+    fetch(API + "/admin/setting?token=" + adminToken, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            head: document.getElementById("setHead").value,
+            title: document.getElementById("setTitle").value,
+            description: document.getElementById("setDesc").value,
+            phone: document.getElementById("setPhone").value,
+            email: document.getElementById("setEmail").value,
+            address: document.getElementById("setAddress").value,
+            working_hours: document.getElementById("setHours").value
+        })
+    }).then(() => alert("Сохранено!"));
 }
 </script>
 

@@ -1039,6 +1039,25 @@ function submitReview() {
 
 loadReviews();
 
+
+    // Загружаем настройки
+fetch(API + "/settings")
+    .then(r => r.json())
+    .then(settings => {
+        if (settings.phone) {
+            // Футер
+            document.querySelector(".footer-brand").textContent = settings.head || "CakeMe";
+            document.querySelector(".contacts").innerHTML = `
+                <span>📍 ${settings.address || ''}</span>
+                <span>📞 ${settings.phone || ''}</span>
+                <span>✉️ ${settings.email || ''}</span>
+                <span>🕐 ${settings.working_hours || ''}</span>
+            `;
+            // Модальное окно
+            document.querySelector(".phone-link").textContent = `📞 ${settings.phone}`;
+            document.querySelector(".phone-link").href = `tel:${settings.phone.replace(/[^0-9+]/g, '')}`;
+        }
+    });
 </script>
 
 

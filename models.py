@@ -30,3 +30,9 @@ class Reviews(Base):
     text = Column(Text, nullable=False)
     rating = Column(Integer, default=5)
     created_at = Column(DateTime, server_default=func.now())
+
+class Setting(Base):
+    __tablename__ = "settings"
+    id = Column(Integer, primary_key=True)
+    key = Column(String, nullable=False)
+    value = Column(String, nullable=False)

@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import String
 
 from database import SessionLocal, Base, engine
-from models import Cake, Order, Reviews
+from models import Cake, Order, Reviews, Setting
 
 app = FastAPI(title = "Торты")
 
@@ -264,5 +264,49 @@ def get_reviews( db = Depends(get_db)):
     return db.query(Reviews).all()
 
 
+
+
+class SetingUpdate(BaseModel):
+    head: str
+    title: str
+    description: str
+    phone: str
+    address: str
+    email: str
+    working_hours: str
+
+@app.post("/admin/setting")
+def setting(seting: SetingUpdate, token: str, db = Depends(get_db)):
+
+    if not verify_token(token):
+        return {"error": "Вы не админ"}
+    defaults = {
+        "head": seting.head,
+        "title": seting.title,
+        "description": seting.description,
+        "phone": seting.phone,
+        "address": seting.address,
+        "email": seting.email,
+        "working_hours": seting.working_hours,
+    }
+
+    for key, value in defaults.items():
+        dbSetting = db.query(Setting).filter(Setting.key == key).first()
+        if dbSetting:
+            dbSetting.value = value
+        else:
+            db.add(Setting(key = key, value = value))
+    db.commit()
+    return defaults
+
+@app.get("/setting")
+def get_settings(db = Depends(get_db)):
+    bd = db.query(Setting).all()
+
+    result = {}
+    for setting in bd:
+        result[setting.key] = setting.value
+
+    return result
 
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")
