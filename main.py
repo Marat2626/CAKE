@@ -5,13 +5,15 @@ from fastapi import FastAPI, Depends, Header, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import String
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 from database import SessionLocal, Base, engine
 from models import Cake, Order, Reviews, Setting
 
-# 🔒 Загружаем переменные окружения из .env файла
-load_dotenv()
 
 app = FastAPI(title="Торты")
 
@@ -39,10 +41,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme123")
 
+# Временное решение для Render:
 fake_users_db = {
-    ADMIN_USERNAME: {
-        "username": ADMIN_USERNAME,
-        "password": pwd_context.hash(ADMIN_PASSWORD),
+    "admin": {
+        "username": "admin",
+        "password": pwd_context.hash("123"),
     }
 }
 
