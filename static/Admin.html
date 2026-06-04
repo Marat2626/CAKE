@@ -42,7 +42,7 @@
         
         .logout-btn { background: #666; color: white; float: right; }
 
-
+        label { display: block; margin-top: 10px; font-weight: 600; color: #555; font-size: 13px; }
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab { padding: 10px 20px; border-radius: 20px; cursor: pointer; border: 2px solid #ddd; background: white; }
         .tab.active { background: #2C1810; color: white; border-color: #2C1810; }
@@ -108,15 +108,30 @@
         </div>
 
         <!-- Настройки (скрыты по умолчанию) -->
-        <div class="box" id="settingsBox" style="display:none;">
+           <div class="box" id="settingsBox" style="display:none;">
             <h2>⚙️ Настройки сайта</h2>
-            <input type="text" id="setHead" placeholder="Название бренда">
-            <input type="text" id="setTitle" placeholder="Заголовок">
-            <textarea id="setDesc" placeholder="Описание"></textarea>
-            <input type="text" id="setPhone" placeholder="Телефон">
-            <input type="text" id="setEmail" placeholder="Email">
-            <input type="text" id="setAddress" placeholder="Адрес">
-            <input type="text" id="setHours" placeholder="Часы работы">
+
+            <label>Название бренда:</label>
+            <input type="text" id="setHead" placeholder="CakeMe">
+
+            <label>Заголовок:</label>
+            <input type="text" id="setTitle" placeholder="Авторские торты">
+
+            <label>Описание:</label>
+            <textarea id="setDesc" placeholder="Текст на главной"></textarea>
+
+            <label>Телефон:</label>
+            <input type="text" id="setPhone" placeholder="+7 (999) 123-45-67">
+
+            <label>Email:</label>
+            <input type="text" id="setEmail" placeholder="sweet@cakeme.ru">
+
+            <label>Адрес:</label>
+            <input type="text" id="setAddress" placeholder="ул. Кондитерская, 15">
+
+            <label>Часы работы:</label>
+            <input type="text" id="setHours" placeholder="Ежедневно 09:00-22:00">
+
             <button class="btn-add" onclick="saveSettings()">💾 Сохранить настройки</button>
         </div>
     </div>   <!-- закрытие adminScreen -->
@@ -206,9 +221,12 @@ function addCake() {
         category: document.getElementById("newCategory").value,
         is_available: document.getElementById("newAvailable").checked
     };
-    fetch(API + "/admin/addCakes?token=" + adminToken, {
+       fetch(API + "/admin/addCakes", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${adminToken}`  // ← Токен в заголовке
+        },
         body: JSON.stringify(data)
     })
     .then(r => r.json())

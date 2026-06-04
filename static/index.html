@@ -3,717 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CakeMe — Авторские торты с характером</title>
+    <title>CakeMe — Авторские торты на заказ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --choco: #2C1810;
-            --caramel: #D4A574;
-            --cream: #FFF8F0;
-            --white: #FFFFFF;
-            --dark: #1A1A1A;
-            --accent: #E8754C;
-            --green: #4A6741;
-            --pink: #E8A5B0;
-        }
-
-
-
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--white);
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Отзывы */
-
-        .reviews-section { padding: 80px 0; background: #FFF8F0; }
-        .reviews-scroll { position: relative; display: flex; align-items: center; }
-        .reviews-track {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding: 20px 0;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        .reviews-track::-webkit-scrollbar { display: none; }
-        .review-card {
-            min-width: 350px;
-            max-width: 400px;
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            flex-shrink: 0;
-            transition: transform 0.3s;
-        }
-        .review-card:hover { transform: translateY(-5px); }
-        .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .review-avatar {
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4A574, #E8A5B0);
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 700; font-size: 20px;
-            flex-shrink: 0;
-        }
-        .review-author { font-weight: 700; color: #2C1810; }
-        .review-date { color: #999; font-size: 12px; }
-        .review-stars { color: #FFB800; margin-bottom: 8px; }
-        .review-text { color: #555; line-height: 1.5; font-style: italic; }
-
-        .scroll-btn {
-            position: absolute;
-            top: 50%; transform: translateY(-50%);
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            background: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            font-size: 20px;
-            z-index: 2;
-            transition: 0.2s;
-        }
-        .scroll-btn:hover { box-shadow: 0 6px 25px rgba(0,0,0,0.2); }
-        .scroll-btn.left { left: -22px; }
-        .scroll-btn.right { right: -22px; }
-
-        .review-form-box {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            max-width: 500px;
-            margin-left: auto; margin-right: auto;
-        }
-        .star-rating { display: flex; gap: 5px; margin: 10px 0; cursor: pointer; }
-        .star { font-size: 28px; color: #ddd; transition: 0.2s; }
-        .star.active, .star:hover { color: #FFB800; }
-
-
-        /* Шапка */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.3s;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 76px;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: #fff;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-        }
-
-        .logo span {
-            background: linear-gradient(135deg, #D4A574, #E8A5B0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 36px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: #C8BDB6;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #fff;
-        }
-
-        .btn-nav {
-            background: var(--caramel);
-            color: #2C1810 !important;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-weight: 700 !important;
-            letter-spacing: 0.3px !important;
-            transition: all 0.3s !important;
-            box-shadow: 0 4px 20px rgba(212, 165, 116, 0.3);
-        }
-
-        .btn-nav:hover {
-            background: #E8C9A0 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(212, 165, 116, 0.5);
-        }
-
-        /* Мобильное меню */
-        .burger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            z-index: 1001;
-        }
-        .burger span {
-            width: 28px;
-            height: 2px;
-            background: #fff;
-            border-radius: 2px;
-            transition: 0.3s;
-        }
-
-        /* ГЕРОЙ-БЛОК */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, #FFF8F0 0%, #FFECD2 30%, #FDE2E4 60%, #FADADD 100%);
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -200px;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(232, 165, 176, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -150px;
-            left: -100px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.25) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            width: 100%;
-            padding-top: 80px;
-        }
-
-        .hero-text {
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #2C1810;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .hero-badge .dot {
-            width: 8px;
-            height: 8px;
-            background: #4CAF50;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-text h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 72px;
-            line-height: 1.05;
-            font-weight: 700;
-            color: #2C1810;
-            margin-bottom: 20px;
-            animation: fadeInUp 0.8s ease 0.2s both;
-            letter-spacing: -1px;
-        }
-
-        .hero-text h1 .accent {
-            position: relative;
-            color: var(--accent);
-            display: inline-block;
-        }
-
-        .hero-text h1 .accent::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            left: 0;
-            width: 100%;
-            height: 12px;
-            background: rgba(232, 117, 76, 0.2);
-            z-index: -1;
-        }
-
-        .hero-text p {
-            font-size: 18px;
-            color: #5C4A3A;
-            margin-bottom: 32px;
-            line-height: 1.7;
-            max-width: 480px;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease 0.6s both;
-        }
-
-        .btn-hero {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 15px;
-            text-decoration: none;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary-hero {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 8px 30px rgba(232, 117, 76, 0.4);
-        }
-        .btn-primary-hero:hover {
-            background: #D4653D;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(232, 117, 76, 0.5);
-        }
-
-        .btn-outline-hero {
-            background: transparent;
-            color: #2C1810;
-            border: 2px solid #D4A574;
-        }
-        .btn-outline-hero:hover {
-            background: #fff;
-            border-color: #2C1810;
-            transform: translateY(-3px);
-        }
-
-        .hero-image-wrap {
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.8s ease 0.3s both;
-        }
-
-        .hero-image-wrap img {
-            width: 100%;
-            max-width: 550px;
-            border-radius: 30px;
-            box-shadow: 0 30px 80px rgba(44, 24, 16, 0.2);
-            transform: rotate(2deg);
-            transition: transform 0.5s;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .hero-image-wrap img:hover {
-            transform: rotate(0deg) scale(1.02);
-        }
-
-        /* Декоративные элементы на герое */
-        .hero-stars {
-            position: absolute;
-            top: 15%;
-            left: 5%;
-            font-size: 28px;
-            animation: float 3s ease-in-out infinite;
-        }
-        .hero-sparkle {
-            position: absolute;
-            bottom: 20%;
-            right: 8%;
-            font-size: 36px;
-            animation: float 4s ease-in-out infinite 0.5s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Секция КАТАЛОГ */
-        .catalog {
-            padding: 100px 0 80px;
-            background: #fff;
-        }
-
-        .catalog-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .catalog-header .label {
-            display: inline-block;
-            background: #FDE2E4;
-            color: #C4606A;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        .catalog-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            font-weight: 700;
-            color: #2C1810;
-            margin-bottom: 12px;
-        }
-
-        .catalog-header p {
-            color: #7A6B5C;
-            font-size: 17px;
-        }
-
-       .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-        }
-
-       .product-card {
-            background: #fff;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid #F0E8DE;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-            cursor: pointer;
-            position: relative;
-        }
-
-        .product-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 30px 60px rgba(44, 24, 16, 0.12);
-            border-color: #D4A574;
-        }
-
-      .product-image {
-            position: relative;
-            overflow: hidden;
-            height: 280px;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.08);
-        }
-
-        .product-tag {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: var(--accent);
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            z-index: 2;
-        }
-
-        .product-fav {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 40px;
-            height: 40px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 2;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-        .product-fav:hover {
-            transform: scale(1.15);
-        }
-
-        .product-info {
-            padding: 24px;
-        }
-
-        .product-info .category {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #B0977E;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .product-info h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2C1810;
-        }
-
-        .product-info .desc {
-            font-size: 14px;
-            color: #7A6B5C;
-            margin-bottom: 16px;
-            line-height: 1.5;
-        }
-
-        .product-meta {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 13px;
-            color: #8B7B6B;
-            background: #F9F5F0;
-            padding: 4px 10px;
-            border-radius: 6px;
-        }
-
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #F0E8DE;
-            padding-top: 16px;
-        }
-
-        .price-block .price {
-            font-size: 24px;
-            font-weight: 800;
-            color: #2C1810;
-        }
-        .price-block .old-price {
-            font-size: 14px;
-            color: #B0A090;
-            text-decoration: line-through;
-            margin-left: 8px;
-        }
-
-        .btn-buy {
-            background: #2C1810;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-buy:hover {
-            background: var(--accent);
-            box-shadow: 0 8px 25px rgba(232, 117, 76, 0.4);
-        }
-
-        /* Секция преимуществ (короткая полоска) */
-        .benefits-strip {
-            background: #2C1810;
-            color: #fff;
-            padding: 50px 0;
-            margin: 40px 0 0;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            text-align: center;
-        }
-
-        .benefit-item .icon {
-            font-size: 36px;
-            margin-bottom: 12px;
-        }
-        .benefit-item h4 {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-        .benefit-item p {
-            font-size: 13px;
-            color: #B0A090;
-        }
-
-        /* Футер */
-        footer {
-            background: #1A1512;
-            color: #8B7B6B;
-            padding: 40px 0;
-            text-align: center;
-        }
-        footer .footer-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-        footer .contacts {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            font-size: 14px;
-        }
-
-        /* Адаптив */
-        @media (max-width: 992px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-                padding-top: 100px;
-                gap: 40px;
-            }
-            .hero-text h1 { font-size: 48px; }
-            .hero-text p { max-width: 100%; margin: 0 auto 32px; }
-            .hero-buttons { justify-content: center; }
-            .hero-image-wrap img { max-width: 320px; }
-            .hero-stars, .hero-sparkle { display: none; }
-            .benefits-grid { grid-template-columns: 1fr 1fr; }
-        }
-                /* Модальное окно */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            max-width: 450px;
-            width: 90%;
-            position: relative;
-        }
-        .modal h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
-        .modal .cake-info { color: #888; margin-bottom: 20px; font-size: 14px; }
-        .modal input, .modal textarea {
-            width: 100%; padding: 12px; margin: 8px 0;
-            border: 1px solid #ddd; border-radius: 8px; font-size: 14px;
-        }
-        .modal textarea { height: 80px; resize: vertical; }
-        .modal .btn-submit {
-            width: 100%; padding: 14px; background: #E8754C;
-            color: white; border: none; border-radius: 10px;
-            font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px;
-        }
-        .modal .btn-close {
-            position: absolute; top: 12px; right: 16px;
-            background: none; border: none; font-size: 24px; cursor: pointer; color: #999;
-        }
-        .modal .success-msg { display: none; text-align: center; padding: 20px; }
-        .modal .success-msg h3 { color: #4CAF50; margin-bottom: 10px; }
-        .modal .success-msg p { color: #666; line-height: 1.6; }
-        .modal .phone-link { color: #E8754C; font-weight: 700; text-decoration: none; }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .burger { display: flex; }
-            .catalog-header h2 { font-size: 36px; }
-            .product-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -721,17 +15,13 @@
     <header>
         <div class="container">
             <nav>
-                <a href="#" class="logo">Cake<span>Me</span></a>
+                <a href="#" class="logo">CakeMe</a>
                 <ul class="nav-links">
                     <li><a href="#catalog">Каталог</a></li>
-                    <li><a href="#">О нас</a></li>
-                    <li><a href="#">Отзывы</a></li>
-                    <li><a href="#">Доставка</a></li>
-                    <li><a href="#" class="btn-nav">Заказать торт</a></li>
+                    <li><a href="#reviews">Отзывы</a></li>
+                    <li><a href="#footer">Контакты</a></li>
+                    <li><a href="#" class="btn-nav" id="orderBtnNav">Заказать</a></li>
                 </ul>
-                <div class="burger">
-                    <span></span><span></span><span></span>
-                </div>
             </nav>
         </div>
     </header>
@@ -745,72 +35,68 @@
                         <div class="hero-badge">
                             <span class="dot"></span> Принимаем заказы 24/7
                         </div>
-                        <h1>Вкус,<br>который хочется<br><span class="accent">запомнить</span></h1>
-                        <p>Создаём авторские торты в минималистичном стиле. Только натуральные ингредиенты и ручная работа с душой. Доставка по городу в день заказа.</p>
+                        <h1>Ваш <span class="accent">идеальный торт</span></h1>
+                        <p>Авторские торты на заказ. Натуральные ингредиенты, уникальный дизайн, доставка по Москве в день заказа.</p>
                         <div class="hero-buttons">
                             <a href="#catalog" class="btn-hero btn-primary-hero">🍰 Выбрать торт</a>
-                            <a href="#" class="btn-hero btn-outline-hero">📞 Перезвоните мне</a>
+                            <a href="#footer" class="btn-hero btn-outline-hero">📞 Перезвоните мне</a>
                         </div>
                     </div>
                     <div class="hero-image-wrap">
-                        <img src="photos/p1.png" alt="Вкусный торт">
+                        <img src="photos/p1.png" alt="Авторский торт" id="heroImage">
                     </div>
                 </div>
             </div>
-            <div class="hero-stars">✨</div>
-            <div class="hero-sparkle">🌸</div>
         </section>
 
-        <!-- КАТАЛОГ (сразу после героя) -->
-   <section class="catalog" id="catalog">
-    <div class="container">
-        <div class="catalog-header">
-            <span class="label">Хиты продаж</span>
-            <h2>Наши торты</h2>
-            <p>Каждый десерт — маленькое произведение искусства</p>
-        </div>
-        <div class="product-grid">
-            <!-- Торты загрузятся из базы автоматически -->
-        </div>
-    </div>
-    </section>
-
-                        <!-- ОТЗЫВЫ -->
-            <section class="reviews-section" id="reviews">
-                <div class="container">
-                    <div class="catalog-header">
-                        <span class="label">Отзывы</span>
-                        <h2>Что говорят клиенты</h2>
-                    </div>
-
-                    <!-- Форма -->
-                    <div class="review-form-box">
-                        <h3 style="margin-bottom:15px;text-align:center;">✍️ Оставить отзыв</h3>
-                        <input type="text" id="reviewName" placeholder="Ваше имя">
-                        <div class="star-rating" id="starRating">
-                            <span class="star" onclick="setRating(1)">★</span>
-                            <span class="star" onclick="setRating(2)">★</span>
-                            <span class="star" onclick="setRating(3)">★</span>
-                            <span class="star" onclick="setRating(4)">★</span>
-                            <span class="star active" onclick="setRating(5)">★</span>
-                        </div>
-                        <textarea id="reviewText" placeholder="Ваш отзыв"></textarea>
-                        <button class="btn-submit" onclick="submitReview()" style="width:auto;margin-top:10px;">Отправить отзыв</button>
-                    </div>
-
-                    <!-- Карусель отзывов -->
-                    <div class="reviews-scroll">
-                        <button class="scroll-btn left" onclick="scrollReviews(-1)">‹</button>
-                        <div class="reviews-track" id="reviewsTrack"></div>
-                        <button class="scroll-btn right" onclick="scrollReviews(1)">›</button>
-                    </div>
+        <!-- КАТАЛОГ -->
+        <section class="catalog" id="catalog">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Хиты продаж</span>
+                    <h2>Наши торты</h2>
+                    <p>Каждый десерт — маленькое произведение искусства</p>
                 </div>
-            </section>
-<!-- Полоска преимуществ -->
-<section class="benefits-strip">
-    <div class="container">
-        <div class="benefits-grid">
+                <div class="product-grid" id="productGrid">
+                    <!-- Торты загрузятся из базы автоматически -->
+                </div>
+            </div>
+        </section>
 
+        <!-- ОТЗЫВЫ -->
+        <section class="reviews-section" id="reviews">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Отзывы</span>
+                    <h2>Что говорят клиенты</h2>
+                </div>
+
+                <div class="review-form-box">
+                    <h3>✍️ Оставить отзыв</h3>
+                    <input type="text" id="reviewName" placeholder="Ваше имя">
+                    <div class="star-rating" id="starRating">
+                        <span class="star" onclick="setRating(1)">★</span>
+                        <span class="star" onclick="setRating(2)">★</span>
+                        <span class="star" onclick="setRating(3)">★</span>
+                        <span class="star" onclick="setRating(4)">★</span>
+                        <span class="star active" onclick="setRating(5)">★</span>
+                    </div>
+                    <textarea id="reviewText" placeholder="Ваш отзыв"></textarea>
+                    <button class="btn-submit" onclick="submitReview()" style="width:auto;margin-top:10px;">Отправить отзыв</button>
+                </div>
+
+                <div class="reviews-scroll">
+                    <button class="scroll-btn left" onclick="scrollReviews(-1)">‹</button>
+                    <div class="reviews-track" id="reviewsTrack"></div>
+                    <button class="scroll-btn right" onclick="scrollReviews(1)">›</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ПРЕИМУЩЕСТВА -->
+        <section class="benefits-strip">
+            <div class="container">
+                <div class="benefits-grid">
                     <div class="benefit-item">
                         <div class="icon">🧈</div>
                         <h4>82,5% масло</h4>
@@ -831,230 +117,281 @@
                         <h4>Гарантия свежести</h4>
                         <p>Печём в день доставки</p>
                     </div>
-
-        </div>
-    </div>
-</section>
-
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Футер -->
-    <footer>
+    <footer id="footer">
         <div class="container">
-           <div class="footer-brand">...</div>
-            <div class="contacts">Загрузка...</div>
+            <div class="footer-brand">CakeMe</div>
+            <div class="contacts" id="footerContacts">Загрузка...</div>
         </div>
     </footer>
 
-<!-- Модальное окно заказа -->
-<div class="modal-overlay" id="orderModal">
-    <div class="modal">
-        <button class="btn-close" onclick="closeOrderModal()">✕</button>
-        <div id="orderForm">
-            <h3>📋 Заказать торт</h3>
-            <div class="cake-info" id="modalCakeInfo"></div>
-            <input type="text" id="orderName" placeholder="Ваше имя">
-            <input type="tel" id="orderPhone" placeholder="Телефон">
-            <textarea id="orderMessage" placeholder="Комментарий (необязательно)"></textarea>
-            <button class="btn-submit" onclick="submitOrder()">🚀 Отправить заказ</button>
-        </div>
-        <div class="success-msg" id="orderSuccess">
-            <h3>✅ Заказ принят!</h3>
-            <p>Мы свяжемся с вами в ближайшее время.<br><br>
-            Или позвоните нам:<br>
-            <a class="phone-link" href="tel:">📞 ...</a>
-            <button class="btn-submit" onclick="closeOrderModal()">Хорошо</button>
+    <!-- Модальное окно заказа -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <button class="btn-close" onclick="closeOrderModal()">✕</button>
+            <div id="orderForm">
+                <h3>📋 Заказать торт</h3>
+                <div class="cake-info" id="modalCakeInfo"></div>
+                <input type="text" id="orderName" placeholder="Ваше имя">
+                <input type="tel" id="orderPhone" placeholder="Телефон">
+                <textarea id="orderMessage" placeholder="Комментарий (необязательно)"></textarea>
+                <button class="btn-submit" onclick="submitOrder()">🚀 Отправить заказ</button>
+            </div>
+            <div class="success-msg" id="orderSuccess">
+                <h3>✅ Заказ принят!</h3>
+                <p>Мы свяжемся с вами в ближайшее время.</p>
+                <button class="btn-submit" onclick="closeOrderModal()">Хорошо</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-const API = "";  // пустая строка = тот же домен
+    <script>
+        const API = "";
 
-// Загружаем торты из базы
-fetch(API + "/cakes")
-    .then(r => r.json())
-    .then(cakes => {
-        let html = "";
-        cakes.forEach(c => {
-            html += `
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="${c.image_url || 'photos/p1.png'}" alt="${c.name}" onerror="this.src='photos/p1.png'">
-                    ${c.is_available ? '<span class="product-tag">🔥 Хит</span>' : '<span class="product-tag" style="background:#999;">Нет в наличии</span>'}
-                    <div class="product-fav">🤍</div>
-                </div>
-                <div class="product-info">
-                    <span class="category">${c.category || 'Торт'}</span>
-                    <h3>${c.name}</h3>
-                    <p class="desc">${c.description || ''}</p>
-                    <div class="product-meta">
-                        <span class="meta-item">⚖️ ${c.weight} кг</span>
-                        <span class="meta-item">👥 ${c.persons} персон</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="price-block">
-                            <span class="price">${c.price.toLocaleString()} ₽</span>
-                        </div>
-                      <button class="btn-buy" onclick='openOrderModal(${c.id}, "${c.name}", ${c.price})'>🛒 Заказать</button>
-                    </div>
-                </div>
-            </div>`;
-        });
-        document.querySelector(".product-grid").innerHTML = html || "<p style='text-align:center;'>Тортов пока нет</p>";
-    });
+        // ⭐ ДЕМО-ДАННЫЕ (пока нет сервера)
+        const DEMO_CAKES = [
+            { id: 1, name: "Медовик", price: 2450, description: "Нежный медовый торт с прослойкой из сметанного крема. Настоящее домашнее лакомство.", weight: "1.2", persons: "4-6", category: "Классический", image_url: "photos/p1.png", is_available: true },
+            { id: 2, name: "Наполеон", price: 2890, description: "Хрустящие коржи с нежным заварным кремом. Торт, знакомый с детства.", weight: "1.5", persons: "6-8", category: "Классический", image_url: "photos/p2.png", is_available: true },
+            { id: 3, name: "Красный бархат", price: 3250, description: "Бархатистый красный бисквит с сырным кремом. Эффектный и вкусный торт.", weight: "1.3", persons: "5-7", category: "Авторский", image_url: "photos/p3.png", is_available: true },
+            { id: 4, name: "Чизкейк", price: 2670, description: "Нежный творожный чизкейк с тонкой песочной основой.", weight: "1.0", persons: "4-5", category: "Авторский", image_url: "photos/p4.png", is_available: true },
+            { id: 5, name: "Прага", price: 2980, description: "Шоколадный бисквит с масляным кремом и шоколадной глазурью.", weight: "1.2", persons: "5-6", category: "Шоколадный", image_url: "photos/p5.png", is_available: true },
+            { id: 6, name: "Тирамису", price: 3450, description: "Итальянский десерт с маскарпоне и кофейной пропиткой.", weight: "1.1", persons: "4-5", category: "Авторский", image_url: "photos/p6.png", is_available: true }
+        ];
 
-   fetch(API + "/cakes")
-    .then(r => r.json())
-    .then(cakes => {
-        if (cakes.length > 0) {
-            // Находим самый дорогой торт
-            let maxPrice = Math.max(...cakes.map(c => c.price));
-            let heroCake = cakes.find(c => c.price === maxPrice);
-
-            // Меняем картинку
-            let heroImg = document.querySelector(".hero-image-wrap img");
-            heroImg.src = heroCake.image_url || 'photos/p1.png';
-            heroImg.alt = heroCake.name;
-
-            // Меняем слово "запомнить" на название торта
-            document.querySelector(".hero-text h1 .accent").textContent = heroCake.name;
-
-            // Меняем описание
-            document.querySelector(".hero-text p").textContent = heroCake.description || 'Создаём авторские торты в минималистичном стиле.';
-
-            // Меняем цену в кнопке
-            document.querySelector(".btn-primary-hero").innerHTML = `🍰 ${heroCake.price.toLocaleString()} ₽`;
+        // Загружаем торты (сначала пытаемся API, если нет — демо)
+        function loadCakes() {
+            return fetch(API + "/cakes")
+                .then(r => {
+                    if (!r.ok) throw new Error("API не доступен");
+                    return r.json();
+                })
+                .then(cakes => {
+                    renderCakes(cakes);
+                    updateHero(cakes);
+                    return cakes;
+                })
+                .catch(() => {
+                    console.log("Используем демо-данные");
+                    renderCakes(DEMO_CAKES);
+                    updateHero(DEMO_CAKES);
+                    return DEMO_CAKES;
+                });
         }
-    });
 
-let currentCakeId = null;
-
-function openOrderModal(cakeId, cakeName, cakePrice) {
-    currentCakeId = cakeId;
-    document.getElementById("modalCakeInfo").innerHTML = `
-        <strong>${cakeName}</strong><br>
-        Цена: ${cakePrice.toLocaleString()} ₽
-    `;
-    document.getElementById("orderForm").style.display = "block";
-    document.getElementById("orderSuccess").style.display = "none";
-    document.getElementById("orderModal").classList.add("active");
-}
-
-function closeOrderModal() {
-    document.getElementById("orderModal").classList.remove("active");
-    document.getElementById("orderName").value = "";
-    document.getElementById("orderPhone").value = "";
-    document.getElementById("orderMessage").value = "";
-}
-
-function submitOrder() {
-    let name = document.getElementById("orderName").value;
-    let phone = document.getElementById("orderPhone").value;
-
-    if (!name || !phone) {
-        alert("Пожалуйста, заполните имя и телефон");
-        return;
-    }
-
-    fetch(API + "/order", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            cake_id: currentCakeId,
-            customer_name: name,
-            phone: phone,
-            message: document.getElementById("orderMessage").value
-        })
-    })
-    .then(r => r.json())
-    .then(() => {
-        document.getElementById("orderForm").style.display = "none";
-        document.getElementById("orderSuccess").style.display = "block";
-    });
-}
-
-
-
-   let currentRating = 5;
-
-function setRating(r) {
-    currentRating = r;
-    document.querySelectorAll('#starRating .star').forEach((s, i) => {
-        s.classList.toggle('active', i < r);
-    });
-}
-
-function scrollReviews(dir) {
-    document.getElementById('reviewsTrack').scrollBy({ left: 370 * dir, behavior: 'smooth' });
-}
-
-function loadReviews() {
-    fetch(API + "/reviews")
-        .then(r => r.json())
-        .then(reviews => {
+        function renderCakes(cakes) {
             let html = "";
-            reviews.forEach(r => {
-                let stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
-                let date = new Date(r.created_at).toLocaleDateString('ru-RU');
-                let initials = r.author_name.charAt(0).toUpperCase();
+            cakes.forEach(c => {
                 html += `
-                <div class="review-card">
-                    <div class="review-header">
-                        <div class="review-avatar">${initials}</div>
-                        <div>
-                            <div class="review-author">${r.author_name}</div>
-                            <div class="review-date">${date}</div>
+                <a href="product.html?id=${c.id}" class="product-card-link" style="text-decoration: none; color: inherit;">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${c.image_url || 'photos/p1.png'}" alt="${c.name}" onerror="this.src='https://placehold.co/400x300/FFF5F0/8B5A2B?text=${c.name}'">
+                            ${c.is_available ? '<span class="product-tag">Хит</span>' : '<span class="product-tag" style="background:#999;">Нет в наличии</span>'}
+                        </div>
+                        <div class="product-info">
+                            <span class="category">${c.category || 'Торт'}</span>
+                            <h3>${c.name}</h3>
+                            <p class="desc">${c.category || 'Авторский торт'} — ручная работа, натуральные ингредиенты</p>
+                            <div class="product-meta">
+                                <span class="meta-item">⚖️ ${c.weight || '1.2'} кг</span>
+                                <span class="meta-item">👥 ${c.persons || '4-6'} персон</span>
+                            </div>
+                            <div class="product-footer">
+                                <div class="price-block">
+                                    <span class="price">${c.price.toLocaleString()} ₽</span>
+                                </div>
+                                <span class="btn-buy" style="display: inline-block; cursor: pointer;">🍰 Подробнее</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="review-stars">${stars}</div>
-                    <p class="review-text">"${r.text}"</p>
-                </div>`;
+                </a>`;
             });
-            document.getElementById("reviewsTrack").innerHTML = html || "<p style='text-align:center;color:#999;'>Пока нет отзывов. Будьте первым!</p>";
-        });
-}
-
-function submitReview() {
-    let name = document.getElementById("reviewName").value;
-    let text = document.getElementById("reviewText").value;
-    if (!name || !text) return alert("Заполните имя и отзыв");
-    fetch(API + "/reviews", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({author_name: name, text: text, rating: currentRating})
-    })
-    .then(() => {
-        document.getElementById("reviewName").value = "";
-        document.getElementById("reviewText").value = "";
-        setRating(5);
-        loadReviews();
-    });
-}
-
-loadReviews();
-
-
-    // Загружаем настройки
-fetch(API + "/settings")
-    .then(r => r.json())
-    .then(settings => {
-        if (settings.phone) {
-            // Футер
-            document.querySelector(".footer-brand").textContent = settings.head || "CakeMe";
-            document.querySelector(".contacts").innerHTML = `
-                <span>📍 ${settings.address || ''}</span>
-                <span>📞 ${settings.phone || ''}</span>
-                <span>✉️ ${settings.email || ''}</span>
-                <span>🕐 ${settings.working_hours || ''}</span>
-            `;
-            // Модальное окно
-            document.querySelector(".phone-link").textContent = `📞 ${settings.phone}`;
-            document.querySelector(".phone-link").href = `tel:${settings.phone.replace(/[^0-9+]/g, '')}`;
+            document.getElementById("productGrid").innerHTML = html || "<p style='text-align:center;color:#999;'>Тортов пока нет</p>";
         }
-    });
-</script>
+
+        function updateHero(cakes) {
+            if (cakes.length > 0) {
+                let maxPrice = Math.max(...cakes.map(c => c.price));
+                let heroCake = cakes.find(c => c.price === maxPrice);
+                let heroImg = document.getElementById("heroImage");
+                if (heroImg) {
+                    heroImg.src = heroCake.image_url || 'photos/p1.png';
+                    heroImg.alt = heroCake.name;
+                }
+                let heroBtn = document.querySelector(".btn-primary-hero");
+                if (heroBtn) {
+                    heroBtn.innerHTML = `🍰 ${heroCake.price.toLocaleString()} ₽`;
+                }
+            }
+        }
+
+        // Настройки сайта
+        function loadSettings() {
+            fetch(API + "/settings")
+                .then(r => r.json())
+                .catch(() => ({ head: "CakeMe", phone: "+7 (999) 123-45-67", address: "Москва, ул. Тверская 15", email: "info@cakeme.ru", working_hours: "Ежедневно 10:00-21:00" }))
+                .then(s => {
+                    if (s.head) {
+                        document.querySelector(".logo").textContent = s.head;
+                        document.querySelector(".footer-brand").textContent = s.head;
+                    }
+                    if (s.phone) {
+                        document.getElementById("footerContacts").innerHTML = `
+                            <span>📍 ${s.address || ''}</span>
+                            <span>📞 ${s.phone || ''}</span>
+                            <span>✉️ ${s.email || ''}</span>
+                            <span>🕐 ${s.working_hours || ''}</span>
+                        `;
+                    }
+                });
+        }
+
+        // Заказы
+        let currentCakeId = null;
+
+        function openOrderModal(cakeId, cakeName, cakePrice) {
+            currentCakeId = cakeId;
+            document.getElementById("modalCakeInfo").innerHTML = `<strong>${cakeName}</strong><br>Цена: ${cakePrice.toLocaleString()} ₽`;
+            document.getElementById("orderForm").style.display = "block";
+            document.getElementById("orderSuccess").style.display = "none";
+            document.getElementById("orderModal").classList.add("active");
+        }
+
+        function closeOrderModal() {
+            document.getElementById("orderModal").classList.remove("active");
+            document.getElementById("orderName").value = "";
+            document.getElementById("orderPhone").value = "";
+            document.getElementById("orderMessage").value = "";
+        }
+
+           function submitOrder() {
+            let name = document.getElementById("orderName").value;
+            let phone = document.getElementById("orderPhone").value;
+            let message = document.getElementById("orderMessage").value;
+
+            if (!name || !phone) {
+                alert("Пожалуйста, заполните имя и телефон");
+                return;
+            }
+
+            const cakeInfo = document.getElementById("modalCakeInfo").innerHTML;
+            let cakeName = "Торт";
+            let cakePrice = 0;
+
+            const matchName = cakeInfo.match(/<strong>(.*?)<\/strong>/);
+            if (matchName) cakeName = matchName[1];
+
+            const matchPrice = cakeInfo.match(/Цена: ([\d\s]+) ₽/);
+            if (matchPrice) cakePrice = matchPrice[1].replace(/\s/g, '');
+
+            fetch("https://formspree.io/f/xpqezbyv", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"      // ← ЭТА СТРОКА
+                },
+                body: JSON.stringify({
+                    name: name,
+                    phone: phone,
+                    cake: cakeName,
+                    price: cakePrice,
+                    message: message,
+                    _subject: "🛒 НОВЫЙ ЗАКАЗ С САЙТА"
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("✅ Заказ отправлен! Мы свяжемся с вами.");
+                    document.getElementById("orderForm").style.display = "none";
+                    document.getElementById("orderSuccess").style.display = "block";
+
+                    document.getElementById("orderName").value = "";
+                    document.getElementById("orderPhone").value = "";
+                    document.getElementById("orderMessage").value = "";
+                } else {
+                    alert("❌ Ошибка отправки. Попробуйте позже.");
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                alert("❌ Ошибка отправки. Проверьте интернет.");
+            });
+}
 
 
+        // Отзывы
+        let currentRating = 5;
+
+        function setRating(r) {
+            currentRating = r;
+            document.querySelectorAll('#starRating .star').forEach((s, i) => {
+                s.classList.toggle('active', i < r);
+            });
+        }
+
+        function scrollReviews(dir) {
+            document.getElementById('reviewsTrack').scrollBy({ left: 350 * dir, behavior: 'smooth' });
+        }
+
+        function loadReviews() {
+            fetch(API + "/reviews")
+                .then(r => r.json())
+                .catch(() => [])
+                .then(reviews => {
+                    let html = "";
+                    reviews.forEach(r => {
+                        let stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+                        let date = new Date(r.created_at).toLocaleDateString('ru-RU');
+                        let initials = r.author_name.charAt(0).toUpperCase();
+                        html += `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">${initials}</div>
+                                <div>
+                                    <div class="review-author">${r.author_name}</div>
+                                    <div class="review-date">${date}</div>
+                                </div>
+                            </div>
+                            <div class="review-stars">${stars}</div>
+                            <p class="review-text">"${r.text}"</p>
+                        </div>`;
+                    });
+                    document.getElementById("reviewsTrack").innerHTML = html || "<p style='text-align:center;color:#999;'>Пока нет отзывов. Будьте первым!</p>";
+                });
+        }
+
+        function submitReview() {
+            let name = document.getElementById("reviewName").value;
+            let text = document.getElementById("reviewText").value;
+            if (!name || !text) return alert("Заполните имя и отзыв");
+            alert("Спасибо за отзыв!");
+            document.getElementById("reviewName").value = "";
+            document.getElementById("reviewText").value = "";
+            setRating(5);
+        }
+
+        // Кнопка в шапке
+        document.getElementById('orderBtnNav')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentCakeId = null;
+            document.getElementById("modalCakeInfo").innerHTML = `Выберите торт в каталоге`;
+            document.getElementById("orderForm").style.display = "block";
+            document.getElementById("orderSuccess").style.display = "none";
+            document.getElementById("orderModal").classList.add("active");
+        });
+
+        // Запуск
+        loadCakes();
+        loadSettings();
+        loadReviews();
+
+
+
+    </script>
 </body>
 </html>
